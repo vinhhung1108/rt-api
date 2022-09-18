@@ -1,15 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Post } from './schemas/post.schema';
 
 @Injectable()
 export class PostService {
+  constructor(@InjectModel(Post.name) private postModel: Model<Post>){}
   create(createPostDto: CreatePostDto) {
     return 'This action adds a new post';
   }
 
-  findAll() {
-    return `This action returns all post`;
+  async findAll(): Promise<Post[]> {
+    return await this.postModel.find().exec();
   }
 
   findOne(id: number) {
