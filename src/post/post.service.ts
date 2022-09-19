@@ -13,7 +13,7 @@ export class PostService {
   }
 
   async findAll(): Promise<Post[]> {
-    return await this.postModel.find().exec();
+    return this.postModel.find().exec();
   }
 
   findOne(id: number) {
