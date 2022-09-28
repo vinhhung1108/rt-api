@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ApiConfigService } from './api-config-service';
+import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-// import databaseConfig from './config/database.config';
+import configuration from './config/configuration';
+import { validate } from './env.validation';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 
@@ -10,14 +13,16 @@ import { UserModule } from './user/user.module';
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env.local',
-      isGlobal: true,
+      // isGlobal: true,
       expandVariables: true,
-      // load: [databaseConfig],
+      load: [configuration],
+      cache: true,
+      validate,
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI'),
+        uri: configService.get<string>('database.uri'),
       }),
       inject: [ConfigService],
     }),
@@ -26,6 +31,6 @@ import { UserModule } from './user/user.module';
     PostModule,
   ],
   // controllers: [AppController],
-  // providers: [AppService],
+  providers: [AppService, ApiConfigService],
 })
 export class AppModule {}
