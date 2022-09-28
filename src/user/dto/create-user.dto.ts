@@ -3,14 +3,14 @@ import { IsEmail, IsOptional, IsString } from 'class-validator';
 export class CreateUserDto {
   // userId: string;
   @IsString()
-  private username: string;
+  readonly username: string;
 
   @IsString()
-  private password: string;
+  readonly password: string;
 
   @IsEmail()
-  private email: string;
+  readonly email: string;
 
   @IsOptional()
-  private roles: string[];
+  readonly roles: string[];
 }

@@ -10,6 +10,7 @@ async function bootstrap() {
       // disableErrorMessages: true,
       // forbidNonWhitelisted: true,
       whitelist: true,
+      transform: true,
     }),
   );
   const configService = app.get(ConfigService);
