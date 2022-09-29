@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ChangePasswordDto } from 'src/user/dto/change-password.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { LoginUserDto } from 'src/user/dto/login-user.dto';
 import { User } from 'src/user/schemas/user.schema';
 import { UserService } from 'src/user/user.service';
 
@@ -20,8 +22,8 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
-    const payload = { username: user.username, sub: user.userId };
+  async login(user: LoginUserDto) {
+    const payload = { username: user.username, sub: user.email };
     return {
       access_token: this.jwtService.sign(payload),
     };
@@ -29,5 +31,13 @@ export class AuthService {
 
   async signup(user: CreateUserDto) {
     return this.userService.createUser(user);
+  }
+
+  async changePassword(user: User, changePasswordDto: ChangePasswordDto) {
+    const userDto = await this.userService.findOne(user.username);
+    if (userDto && userDto.password === changePasswordDto.oldPassword) {
+      userDto.password = changePasswordDto.newPassword;
+    }
+    return this.userService.changePassword(userDto._id, userDto);
   }
 }

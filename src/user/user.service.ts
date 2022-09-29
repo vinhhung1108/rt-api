@@ -36,6 +36,7 @@ export class UserService {
   }
 
   async changePassword(id: string, user: ChangePasswordDto): Promise<User> {
+    // const id = user.id;
     return await this.userModel.findOneAndUpdate({ _id: id }, user, {
       returnOriginal: false,
     });

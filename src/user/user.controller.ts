@@ -29,11 +29,8 @@ export class UserController {
     return this.userService.deleteOne(id);
   }
 
-  @Patch(':id')
-  changePassword(
-    @Param('id') id: string,
-    @Body() changePasswordDto: ChangePasswordDto,
-  ) {
-    return this.userService.changePassword(id, changePasswordDto);
-  }
+  // @Patch('change-password')
+  // changePassword(@Body() changePasswordDto: ChangePasswordDto) {
+  //   return this.userService.changePassword(changePasswordDto);
+  // }
 }
