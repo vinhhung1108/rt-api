@@ -23,7 +23,6 @@ export class AuthController {
   @Post('login')
   async login(@Request() req) {
     return this.authService.login(req.user);
-    // return req.user;
   }
 
   @Public()
@@ -44,7 +43,6 @@ export class AuthController {
     @Request() req,
     @Body() changePasswordDto: ChangePasswordDto,
   ) {
-    const user = req.user;
-    return this.authService.changePassword(user, changePasswordDto);
+    return this.authService.changePassword(req.user, changePasswordDto);
   }
 }

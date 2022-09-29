@@ -35,7 +35,7 @@ export class AuthService {
 
   async changePassword(user: User, changePasswordDto: ChangePasswordDto) {
     const userDto = await this.userService.findOne(user.username);
-    if (userDto && userDto.password === changePasswordDto.oldPassword) {
+    if (userDto && userDto.password === changePasswordDto.currentPassword) {
       userDto.password = changePasswordDto.newPassword;
     }
     return this.userService.changePassword(userDto._id, userDto);
