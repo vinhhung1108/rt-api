@@ -1,24 +1,37 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export type UserDocument = User & Document;
 
-@Schema()
+@Schema({
+  timestamps: true,
+  // autoIndex: false, //By default of mongoose is 'true', change to 'false' in production
+  // autoCreate: false, //By default of mongoose is 'true', change to 'false in production
+})
 export class User {
-  @Prop()
-  readonly userId: string;
+  @Prop({ type: Number, unique: true })
+  userId: number;
 
-  @Prop()
+  @Prop({ type: String, unique: true })
   readonly username: string;
 
   @Prop()
   readonly password: string;
 
-  @Prop()
+  @Prop({ unique: true })
   readonly email: string;
 
-  @Prop()
+  @Prop({ default: ['default'] })
   readonly roles: string[];
+
+  @Prop()
+  readonly listingPost: string[];
+
+  @Prop()
+  createdBy: Types.ObjectId;
+
+  @Prop()
+  updatedBy: Types.ObjectId;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

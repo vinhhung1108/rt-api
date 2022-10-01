@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { Public } from 'src/custom.decorator';
-import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
@@ -12,6 +11,12 @@ export class UserController {
   @Get()
   findAll() {
     return this.userService.findAll();
+  }
+
+  @Public()
+  @Get('last-user')
+  lastUser() {
+    return this.userService.lastUser();
   }
 
   @Get(':username')
@@ -28,9 +33,4 @@ export class UserController {
   deleteOne(@Param('id') id: string) {
     return this.userService.deleteOne(id);
   }
-
-  // @Patch('change-password')
-  // changePassword(@Body() changePasswordDto: ChangePasswordDto) {
-  //   return this.userService.changePassword(changePasswordDto);
-  // }
 }

@@ -5,9 +5,9 @@ import { ApiConfigService } from './api-config-service';
 export class AppService {
   constructor(apiConfigService: ApiConfigService) {
     if (apiConfigService.isAuthEnabled) {
-      console.log('auth enabled');
+      // console.log('auth enabled');
     } else {
-      console.log('auth disabled');
+      // console.log('auth disabled');
     }
   }
 }

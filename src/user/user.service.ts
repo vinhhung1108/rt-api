@@ -13,7 +13,7 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async findOne(username: string): Promise<Users | undefined> {
-    const user = await this.userModel.findOne({ username: username }).exec();
+    const user = await this.userModel.findOne({ username: username });
     return user.toObject(); /** mongoose to object normal */
   }
 
@@ -21,7 +21,15 @@ export class UserService {
     return this.userModel.find().exec();
   }
 
-  async createUser(user: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    const lastUser = await this.lastUser();
+    let userId: number;
+    if (lastUser) {
+      userId = ++lastUser.userId;
+    } else {
+      userId = 1;
+    }
+    const user = { ...createUserDto, userId: userId };
     return await this.userModel.create(user);
   }
 
@@ -32,7 +40,7 @@ export class UserService {
   }
 
   async deleteOne(id: string): Promise<User> {
-    return await this.userModel.findOneAndDelete({ _id: id }).exec();
+    return await this.userModel.findOneAndDelete({ _id: id });
   }
 
   async changePassword(id: string, user: ChangePasswordDto): Promise<User> {
@@ -40,5 +48,13 @@ export class UserService {
     return await this.userModel.findOneAndUpdate({ _id: id }, user, {
       returnOriginal: false,
     });
+  }
+
+  async lastUser(): Promise<User | undefined> {
+    return await this.userModel
+      .findOne()
+      .sort({ field: 'asc', _id: -1 })
+      .limit(1)
+      .exec();
   }
 }

@@ -7,9 +7,9 @@ import { Post } from './schemas/post.schema';
 
 @Injectable()
 export class PostService {
-  constructor(@InjectModel(Post.name) private postModel: Model<Post>){}
+  constructor(@InjectModel(Post.name) private postModel: Model<Post>) {}
   create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+    return createPostDto;
   }
 
   async findAll(): Promise<Post[]> {
@@ -21,7 +21,7 @@ export class PostService {
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+    return updatePostDto;
   }
 
   remove(id: number) {
