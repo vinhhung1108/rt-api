@@ -9,11 +9,11 @@ import { Post } from './schemas/post.schema';
 export class PostService {
   constructor(@InjectModel(Post.name) private postModel: Model<Post>) {}
 
-  async create(createPostDto: CreatePostDto): Promise<Post> {
+  async create(createPostDto: CreatePostDto, user: any): Promise<Post> {
     const lastPost = await this.lastPost();
-    const postId = lastPost.postId ? ++lastPost.postId : 1;
-    const newPost = { ...createPostDto, postId: postId };
-    return this.postModel.create(newPost);
+    const postId = lastPost ? ++lastPost.postId : 1;
+    const newPost = { ...createPostDto, postId: postId, createdBy: user.id };
+    return await this.postModel.create(newPost);
   }
 
   async findAll(): Promise<Post[]> {
@@ -27,9 +27,11 @@ export class PostService {
   async update(
     id: string,
     updatePostDto: UpdatePostDto,
+    user: any,
   ): Promise<Post | undefined> {
+    const updatePost = { ...updatePostDto, updatedBy: user.id };
     return await this.postModel
-      .findOneAndUpdate({ _id: id }, updatePostDto, {
+      .findOneAndUpdate({ _id: id }, updatePost, {
         returnOriginal: false,
       })
       .exec();

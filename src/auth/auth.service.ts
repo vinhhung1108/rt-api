@@ -1,4 +1,4 @@
-import { ConsoleLogger, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ChangePasswordDto } from 'src/user/dto/change-password.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
@@ -22,8 +22,8 @@ export class AuthService {
     return null;
   }
 
-  async login(user: LoginUserDto) {
-    const payload = { username: user.username, sub: user.email };
+  async login(user: any) {
+    const payload = { username: user.username, sub: user.email, id: user._id }; //Declare fields return from User class
     return {
       access_token: this.jwtService.sign(payload),
     };

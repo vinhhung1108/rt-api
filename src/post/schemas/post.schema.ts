@@ -6,10 +6,10 @@ export type PostDocument = Post & Document;
 
 @Schema({
   timestamps: true,
-  // autoIndex: false,
+  autoIndex: false,
 })
 export class Post {
-  @Prop({ unique: true })
+  @Prop({ index: true, unique: true })
   postId: number;
 
   @Prop()
@@ -21,11 +21,11 @@ export class Post {
   @Prop()
   readonly category: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'User' })
-  createdBy: User;
+  @Prop()
+  createdBy: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: 'User' })
-  updatedBy: User;
+  @Prop()
+  updatedBy: Types.ObjectId;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

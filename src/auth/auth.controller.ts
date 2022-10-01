@@ -2,8 +2,8 @@ import {
   Body,
   Controller,
   Get,
-  Post,
   Patch,
+  Post,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -40,7 +40,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Patch('change-password')
   async changePassword(
-    @Request() req,
+    @Request() req: any,
     @Body() changePasswordDto: ChangePasswordDto,
   ) {
     return this.authService.changePassword(req.user, changePasswordDto);
