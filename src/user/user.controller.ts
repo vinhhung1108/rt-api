@@ -13,12 +13,6 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Public()
-  @Get('last-user')
-  lastUser() {
-    return this.userService.lastUser();
-  }
-
   @Get(':username')
   findByUsername(@Param('username') username: string) {
     return this.userService.findOne(username);

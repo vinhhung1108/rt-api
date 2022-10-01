@@ -23,12 +23,7 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const lastUser = await this.lastUser();
-    let userId: number;
-    if (lastUser) {
-      userId = ++lastUser.userId;
-    } else {
-      userId = 1;
-    }
+    const userId = lastUser ? ++lastUser.userId : 1;
     const user = { ...createUserDto, userId: userId };
     return await this.userModel.create(user);
   }

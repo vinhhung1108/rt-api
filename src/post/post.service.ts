@@ -8,23 +8,42 @@ import { Post } from './schemas/post.schema';
 @Injectable()
 export class PostService {
   constructor(@InjectModel(Post.name) private postModel: Model<Post>) {}
-  create(createPostDto: CreatePostDto) {
-    return createPostDto;
+
+  async create(createPostDto: CreatePostDto): Promise<Post> {
+    const lastPost = await this.lastPost();
+    const postId = lastPost.postId ? ++lastPost.postId : 1;
+    const newPost = { ...createPostDto, postId: postId };
+    return this.postModel.create(newPost);
   }
 
   async findAll(): Promise<Post[]> {
-    return this.postModel.find().exec();
+    return await this.postModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(id: string): Promise<Post | undefined> {
+    return await this.postModel.findOne({ _id: id });
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return updatePostDto;
+  async update(
+    id: string,
+    updatePostDto: UpdatePostDto,
+  ): Promise<Post | undefined> {
+    return await this.postModel
+      .findOneAndUpdate({ _id: id }, updatePostDto, {
+        returnOriginal: false,
+      })
+      .exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(id: string): Promise<Post | undefined> {
+    return await this.postModel.findOneAndDelete({ _id: id });
+  }
+
+  async lastPost(): Promise<Post | undefined> {
+    return await this.postModel
+      .findOne()
+      .sort({ field: 'asc', _id: -1 })
+      .limit(1)
+      .exec();
   }
 }
