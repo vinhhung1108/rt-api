@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { User } from 'src/user/schemas/user.schema';
 
@@ -20,6 +20,19 @@ export class Post {
 
   @Prop()
   readonly category: string;
+
+  @Prop(
+    raw({
+      name: { type: String },
+      houseNumberAndStreetName: { type: String },
+      ward: { type: String },
+      district: { type: String },
+      city: { type: String },
+      province: { type: String },
+      country: { type: String },
+    }),
+  )
+  readonly address: Record<string, any>;
 
   @Prop()
   createdBy: Types.ObjectId;

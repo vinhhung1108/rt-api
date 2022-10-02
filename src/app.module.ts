@@ -10,6 +10,7 @@ import configuration from './config/configuration';
 import { validate } from './env.validation';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
+import { ProvinceModule } from './province/province.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     UserModule,
     PostModule,
+    ProvinceModule,
   ],
 
   // controllers: [AppController],
