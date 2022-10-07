@@ -1,16 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import { ProvinceService } from './province.service';
-import { CreateProvinceDto } from './dto/create-province.dto';
-import { UpdateProvinceDto } from './dto/update-province.dto';
+import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import { Public } from 'src/custom.decorator';
+import { UpdateProvinceDto } from './dto/update-province.dto';
+import { ProvinceService } from './province.service';
 
 @Controller('province')
 export class ProvinceController {
