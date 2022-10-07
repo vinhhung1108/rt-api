@@ -1,19 +1,17 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
+  Param,
+  Patch,
+  Post,
   Request,
 } from '@nestjs/common';
-import { PostService } from './post.service';
+import { Public } from 'src/custom.decorator';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { Public } from 'src/custom.decorator';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { PostService } from './post.service';
 
 @Controller('post')
 export class PostController {

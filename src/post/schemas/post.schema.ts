@@ -1,8 +1,22 @@
-import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { User } from 'src/user/schemas/user.schema';
 
 export type PostDocument = Post & Document;
+
+@Schema({ _id: false })
+export class Address {
+  @Prop()
+  provinceId: string;
+
+  @Prop()
+  districtId: number;
+
+  @Prop()
+  wardId: number;
+
+  @Prop()
+  text: string;
+}
 
 @Schema({
   timestamps: true,
@@ -13,26 +27,19 @@ export class Post {
   postId: number;
 
   @Prop()
-  readonly title: string;
+  title: string;
 
   @Prop()
-  readonly content: string;
+  content: string;
 
   @Prop()
-  readonly category: string;
+  category: string;
 
-  @Prop(
-    raw({
-      name: { type: String },
-      houseNumberAndStreetName: { type: String },
-      ward: { type: String },
-      district: { type: String },
-      city: { type: String },
-      province: { type: String },
-      country: { type: String },
-    }),
-  )
-  readonly address: Record<string, any>;
+  @Prop({ type: Address })
+  address: Address;
+
+  @Prop({ type: [String], required: false, default: undefined })
+  photos: string[];
 
   @Prop()
   createdBy: Types.ObjectId;

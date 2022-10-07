@@ -1,18 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ProvinceService } from 'src/province/province.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { Post } from './schemas/post.schema';
+import { Post, PostDocument } from './schemas/post.schema';
 
 @Injectable()
 export class PostService {
-  constructor(@InjectModel(Post.name) private postModel: Model<Post>) {}
+  constructor(
+    @InjectModel(Post.name) private postModel: Model<PostDocument>,
+    private provinceService: ProvinceService,
+  ) {}
 
-  async create(createPostDto: CreatePostDto, user: any): Promise<Post> {
+  async create(req: CreatePostDto, user: any): Promise<Post> {
     const lastPost = await this.lastPost();
     const postId = lastPost ? ++lastPost.postId : 1;
-    const newPost = { ...createPostDto, postId: postId, createdBy: user.id };
+    const addressText = req.address
+      ? await this.provinceService.getTextAddress(
+          req.address.provinceId,
+          req.address.districtId,
+          req.address.wardId,
+        )
+      : undefined;
+    const addressWithText = req.address
+      ? { ...req.address, text: addressText }
+      : {};
+    const newPost = {
+      ...req,
+      postId: postId,
+      createdBy: user.id,
+      address: addressWithText,
+      // address: address,
+    };
     return await this.postModel.create(newPost);
   }
 
@@ -21,7 +41,8 @@ export class PostService {
   }
 
   async findOne(id: string): Promise<Post | undefined> {
-    return await this.postModel.findOne({ _id: id });
+    const post = await this.postModel.findOne({ _id: id });
+    return post;
   }
 
   async update(
