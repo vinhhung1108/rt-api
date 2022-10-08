@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { from, Observable } from 'rxjs';
 import { ProvinceService } from 'src/province/province.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -36,15 +37,17 @@ export class PostService {
     return await this.postModel.create(newPost);
   }
 
-  async findAll(keyword?: string, limit = 10, skip = 0): Promise<Post[]> {
+  findAll(keyword?: string, limit = 10, skip = 0): Observable<Post[]> {
     if (keyword) {
-      return await this.postModel
-        .find({ title: { $regex: '.*' + keyword + '*' } })
-        .skip(skip)
-        .limit(limit)
-        .exec();
+      return from(
+        this.postModel
+          .find({ title: { $regex: '.*' + keyword + '*' } })
+          .skip(skip)
+          .limit(limit)
+          .exec(),
+      );
     } else {
-      return await this.postModel.find().skip(skip).limit(limit).exec();
+      return from(this.postModel.find({}).skip(skip).limit(limit).exec());
     }
   }
 

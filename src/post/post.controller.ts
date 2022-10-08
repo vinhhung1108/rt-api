@@ -11,10 +11,12 @@ import {
   Query,
   Request,
 } from '@nestjs/common';
+import { Observable } from 'rxjs';
 import { Public } from 'src/custom.decorator';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
+import { Post as BlogPost } from './schemas/post.schema';
 
 @Controller('post')
 export class PostController {
@@ -31,8 +33,8 @@ export class PostController {
     @Query('q') keyword?: string,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
     @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip?: number,
-  ) {
-    return this.postService.findAll(keyword, skip, limit);
+  ): Observable<BlogPost[]> {
+    return this.postService.findAll(keyword, limit, skip);
   }
 
   @Public()
