@@ -36,8 +36,16 @@ export class PostService {
     return await this.postModel.create(newPost);
   }
 
-  async findAll(): Promise<Post[]> {
-    return await this.postModel.find().exec();
+  async findAll(keyword?: string, limit = 10, skip = 0): Promise<Post[]> {
+    if (keyword) {
+      return await this.postModel
+        .find({ title: { $regex: '.*' + keyword + '*' } })
+        .skip(skip)
+        .limit(limit)
+        .exec();
+    } else {
+      return await this.postModel.find().skip(skip).limit(limit).exec();
+    }
   }
 
   async findOne(id: string): Promise<Post | undefined> {
@@ -69,4 +77,11 @@ export class PostService {
       .limit(1)
       .exec();
   }
+
+  async deleteAll(): Promise<any> {
+    return await this.postModel.deleteMany({}).exec();
+  }
+
+  //action for comments
+  //...
 }

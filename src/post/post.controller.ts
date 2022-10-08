@@ -1,11 +1,14 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  Query,
   Request,
 } from '@nestjs/common';
 import { Public } from 'src/custom.decorator';
@@ -24,8 +27,12 @@ export class PostController {
 
   @Public()
   @Get()
-  findAll() {
-    return this.postService.findAll();
+  findAll(
+    @Query('q') keyword?: string,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
+    @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip?: number,
+  ) {
+    return this.postService.findAll(keyword, skip, limit);
   }
 
   @Public()
