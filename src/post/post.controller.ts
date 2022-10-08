@@ -9,7 +9,7 @@ import {
   Patch,
   Post,
   Query,
-  Request
+  Request,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Public } from 'src/decorator/public.decorator';

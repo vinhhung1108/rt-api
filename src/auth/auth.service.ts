@@ -22,7 +22,12 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { username: user.username, sub: user.email, id: user._id }; //Declare fields return from User class
+    const payload = {
+      username: user.username,
+      sub: user.email,
+      id: user._id,
+      roles: user.roles,
+    }; //Declare fields return from User class then return to validate method in jwt strategy
     return {
       access_token: this.jwtService.sign(payload),
     };

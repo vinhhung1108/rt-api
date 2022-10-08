@@ -4,12 +4,12 @@ import { Strategy } from 'passport-local';
 import { User } from 'src/user/schemas/user.schema';
 import { AuthService } from './auth.service';
 
-export interface UserInfo {
-  userId?: string;
-  username: string;
-  password?: string;
-  roles?: string[];
-}
+// export interface UserInfo {
+//   userId?: string;
+//   username: string;
+//   password?: string;
+//   roles?: string[];
+// }
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
