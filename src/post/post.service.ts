@@ -41,7 +41,12 @@ export class PostService {
     if (keyword) {
       return from(
         this.postModel
-          .find({ title: { $regex: '.*' + keyword + '*' } })
+          .find({
+            $or: [
+              { title: { $regex: '.*' + keyword + '*' } },
+              { content: { $regex: '.*' + keyword + '*' } },
+            ],
+          })
           .skip(skip)
           .limit(limit)
           .exec(),
