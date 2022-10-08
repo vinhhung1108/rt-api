@@ -9,10 +9,12 @@ import {
   Patch,
   Post,
   Query,
-  Request,
+  Request
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { Public } from 'src/custom.decorator';
+import { Public } from 'src/decorator/public.decorator';
+import { Roles } from 'src/decorator/roles.decorator';
+import { Role } from 'src/enum/role.enum';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
@@ -23,6 +25,7 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post()
+  @Roles(Role.Admin)
   create(@Request() req: any, @Body() createPostDto: CreatePostDto) {
     return this.postService.create(createPostDto, req.user);
   }

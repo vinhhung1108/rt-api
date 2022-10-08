@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
-import { Public } from 'src/custom.decorator';
+import { Public } from 'src/decorator/public.decorator';
 import { UpdateProvinceDto } from './dto/update-province.dto';
 import { ProvinceService } from './province.service';
 

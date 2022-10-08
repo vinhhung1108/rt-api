@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { Role } from 'src/enum/role.enum';
 
 export type UserDocument = User & Document;
 
@@ -22,7 +23,7 @@ export class User {
   readonly email: string;
 
   @Prop({ default: ['default'] })
-  readonly roles: string[];
+  readonly roles: Role[];
 
   @Prop()
   readonly listingPost: string[];

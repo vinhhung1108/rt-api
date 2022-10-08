@@ -11,6 +11,7 @@ import { validate } from './env.validation';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 import { ProvinceModule } from './province/province.module';
+import { RolesGuard } from './auth/roles.guard';
 
 @Module({
   imports: [
@@ -41,6 +42,11 @@ import { ProvinceModule } from './province/province.module';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    //Apply role guard global
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
     AppService,
     ApiConfigService,

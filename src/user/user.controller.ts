@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
-import { Public } from 'src/custom.decorator';
+import { Public } from 'src/decorator/public.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
