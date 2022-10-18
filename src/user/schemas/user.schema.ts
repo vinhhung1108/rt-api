@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Role } from 'src/enum/role.enum';
 
 export type UserDocument = User & Document;
 
@@ -10,6 +9,9 @@ export type UserDocument = User & Document;
   // autoCreate: false, //By default of mongoose is 'true', change to 'false in production
 })
 export class User {
+  @Prop()
+  _id: Types.ObjectId;
+
   @Prop({ type: Number, unique: true })
   userId: number;
 
@@ -22,8 +24,11 @@ export class User {
   @Prop({ unique: true })
   readonly email: string;
 
-  @Prop({ default: ['default'] })
-  readonly roles: Role[];
+  @Prop({ default: ['user'] })
+  readonly roles: string[];
+
+  @Prop({ default: true })
+  isCreatable: boolean;
 
   @Prop()
   readonly listingPost: string[];

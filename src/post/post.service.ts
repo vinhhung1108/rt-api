@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
+import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
+import { Action } from 'src/enum/action.enum';
 import { ProvinceService } from 'src/province/province.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -12,9 +14,17 @@ export class PostService {
   constructor(
     @InjectModel(Post.name) private postModel: Model<PostDocument>,
     private provinceService: ProvinceService,
+    private caslAbilityFactory: CaslAbilityFactory,
   ) {}
 
-  async create(req: CreatePostDto, user: any): Promise<Post> {
+  async create(
+    req: CreatePostDto,
+    user: any,
+  ): Promise<Post | { message: string }> {
+    const ability = this.caslAbilityFactory.createForUser(user);
+    if (!ability.can(Action.Create, Post)) {
+      return { message: 'You cannot create Post' };
+    }
     const lastPost = await this.lastPost();
     const postId = lastPost ? ++lastPost.postId : 1;
     const addressText = req.address
@@ -86,9 +96,11 @@ export class PostService {
       .exec();
   }
 
-  async deleteAll(): Promise<any> {
-    return await this.postModel.deleteMany({}).exec();
-  }
+  // async deleteAll(confirm: { value: string }): Promise<any> {
+  //   if (confirm.value === 'dell') {
+  //     return await this.postModel.deleteMany({}).exec();
+  //   }
+  // }
 
   //action for comments
   //...

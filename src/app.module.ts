@@ -12,6 +12,8 @@ import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 import { ProvinceModule } from './province/province.module';
 import { RolesGuard } from './auth/roles.guard';
+import { RoleModule } from './role/role.module';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { RolesGuard } from './auth/roles.guard';
     UserModule,
     PostModule,
     ProvinceModule,
+    RoleModule,
+    CaslModule,
   ],
 
   // controllers: [AppController],

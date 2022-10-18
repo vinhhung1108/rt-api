@@ -41,6 +41,12 @@ export class Post {
   @Prop({ type: [String], required: false, default: undefined })
   photos: string[];
 
+  @Prop({ default: false })
+  isPublished: boolean;
+
+  @Prop({ default: false })
+  isSold: boolean;
+
   @Prop()
   createdBy: Types.ObjectId;
 

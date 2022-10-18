@@ -5,7 +5,7 @@ import {
   Patch,
   Post,
   Request,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { Public } from 'src/decorator/public.decorator';
 import { ChangePasswordDto } from 'src/user/dto/change-password.dto';
