@@ -9,7 +9,6 @@ export type UserDocument = User & Document;
   // autoCreate: false, //By default of mongoose is 'true', change to 'false in production
 })
 export class User {
-  @Prop()
   _id: Types.ObjectId;
 
   @Prop({ type: Number, unique: true })
@@ -19,7 +18,7 @@ export class User {
   readonly username: string;
 
   @Prop()
-  readonly password: string;
+  password: string;
 
   @Prop({ unique: true })
   readonly email: string;
@@ -28,7 +27,7 @@ export class User {
   readonly roles: string[];
 
   @Prop({ default: true })
-  isCreatable: boolean;
+  readonly isCreatable: boolean;
 
   @Prop()
   readonly listingPost: string[];

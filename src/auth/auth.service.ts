@@ -4,6 +4,7 @@ import { ChangePasswordDto } from 'src/user/dto/change-password.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/schemas/user.schema';
 import { UserService } from 'src/user/user.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,8 @@ export class AuthService {
 
   async validateuser(username: string, pass: string): Promise<User> {
     const user = await this.userService.findOne(username);
-    if (user && user.password === pass) {
+    const isMatch = await bcrypt.compare(pass, user.password);
+    if (user && isMatch) {
       const { password, ...result } = user;
       return result;
     }
@@ -25,8 +27,9 @@ export class AuthService {
     const payload = {
       username: user.username,
       sub: user.email,
-      id: user._id,
+      _id: user._id,
       roles: user.roles,
+      isCreatable: user.isCreatable,
     }; //Declare fields return from User class then return to validate method in jwt strategy
     return {
       access_token: this.jwtService.sign(payload),

@@ -5,6 +5,7 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
+import * as bcrypt from 'bcrypt';
 
 export type Users = any;
 
@@ -24,7 +25,9 @@ export class UserService {
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const lastUser = await this.lastUser();
     const userId = lastUser ? ++lastUser.userId : 1;
-    const user = { ...createUserDto, userId: userId };
+    const salt = await bcrypt.genSalt();
+    const password = await bcrypt.hash(createUserDto.password, salt);
+    const user = { ...createUserDto, userId: userId, password: password };
     return await this.userModel.create(user);
   }
 

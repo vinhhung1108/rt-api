@@ -5,6 +5,7 @@ import { from, Observable } from 'rxjs';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { Action } from 'src/enum/action.enum';
 import { ProvinceService } from 'src/province/province.service';
+import { User } from 'src/user/schemas/user.schema';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post, PostDocument } from './schemas/post.schema';
@@ -19,7 +20,7 @@ export class PostService {
 
   async create(
     req: CreatePostDto,
-    user: any,
+    user: User,
   ): Promise<Post | { message: string }> {
     const ability = this.caslAbilityFactory.createForUser(user);
     if (!ability.can(Action.Create, Post)) {
@@ -40,7 +41,7 @@ export class PostService {
     const newPost = {
       ...req,
       postId: postId,
-      createdBy: user.id,
+      createdBy: user._id,
       address: addressWithText,
       // address: address,
     };
