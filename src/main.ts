@@ -19,7 +19,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get('port');
   app.enableCors();
-  app.use(csurf());
+  // app.use(csurf());
   await app.listen(port);
 }
 bootstrap();

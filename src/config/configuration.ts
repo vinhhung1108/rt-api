@@ -10,4 +10,8 @@ export default () => ({
     secret_key: process.env.SECRET_KEY,
   },
   authEnabled: process.env.AUTH_ENABLED,
+  throttle: {
+    ttl: process.env.THROTTLE_TTL || 60,
+    limit: process.env.THOTTLE_LIMIT || 10,
+  },
 });
