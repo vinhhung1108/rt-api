@@ -23,7 +23,7 @@ import { Post as BlogPost } from './schemas/post.schema';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @Post()
+  @Post('create')
   @Roles('mod', 'admin', 'user')
   create(@Request() req: any, @Body() createPostDto: CreatePostDto) {
     return this.postService.create(createPostDto, req.user);
@@ -34,9 +34,10 @@ export class PostController {
   findAll(
     @Query('q') keyword?: string,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
-    @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip?: number,
+    // @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip?: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
   ): Observable<BlogPost[]> {
-    return this.postService.findAll(keyword, limit, skip);
+    return this.postService.findAll(page, limit, keyword);
   }
 
   @Public()

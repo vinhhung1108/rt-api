@@ -5,6 +5,9 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/schemas/user.schema';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
+import * as moment from 'moment-timezone';
+
+moment.tz.setDefault('Asia/Bangkok');
 
 @Injectable()
 export class AuthService {
@@ -31,8 +34,14 @@ export class AuthService {
       roles: user.roles,
       isCreatable: user.isCreatable,
     }; //Declare fields return from User class then return to validate method in jwt strategy
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '1d' });
+    const decode = this.jwtService.verify(accessToken, {
+      secret: process.env.SECRET_KEY,
+    });
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken: accessToken,
+      // expiredAt: moment.unix(decode.exp).format('YYYY-MM-DD HH:mm:ss'),
+      expiredAt: decode.exp,
     };
   }
 

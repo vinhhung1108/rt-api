@@ -12,6 +12,6 @@ export default () => ({
   authEnabled: process.env.AUTH_ENABLED,
   throttle: {
     ttl: process.env.THROTTLE_TTL || 60,
-    limit: process.env.THOTTLE_LIMIT || 10,
+    limit: process.env.THOTTLE_LIMIT || 100,
   },
 });

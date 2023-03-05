@@ -48,7 +48,8 @@ export class PostService {
     return await this.postModel.create(newPost);
   }
 
-  findAll(keyword?: string, limit = 10, skip = 0): Observable<Post[]> {
+  findAll(page = 1, limit = 10, keyword?: string): Observable<Post[]> {
+    const skip = limit * (page - 1);
     if (keyword) {
       return from(
         this.postModel

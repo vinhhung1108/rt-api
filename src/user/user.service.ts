@@ -15,6 +15,7 @@ export class UserService {
 
   async findOne(username: string): Promise<Users | undefined> {
     const user = await this.userModel.findOne({ username: username });
+
     return user.toObject(); /** mongoose to object normal */
   }
 

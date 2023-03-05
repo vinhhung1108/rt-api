@@ -3,10 +3,13 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
-import * as csurf from 'csurf';
+import * as moment from 'moment-timezone';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  moment.tz.setDefault('Asia/Ho_Chi_Minh');
+
   app.use(helmet());
   app.useGlobalPipes(
     new ValidationPipe({
@@ -18,8 +21,9 @@ async function bootstrap() {
   );
   const configService = app.get(ConfigService);
   const port = configService.get('port');
+
   app.enableCors();
-  // app.use(csurf());
+
   await app.listen(port);
 }
 bootstrap();
