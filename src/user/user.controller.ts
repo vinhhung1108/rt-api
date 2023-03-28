@@ -1,16 +1,30 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
-import { Public } from 'src/decorator/public.decorator';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Query,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './schemas/user.schema';
 import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Public()
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  findAll(
+    // @Query('q') keyword?: string,
+    @Query('_limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
+    @Query('_page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
+  ): Observable<User[]> {
+    return this.userService.findAll(page, limit);
   }
 
   @Get(':username')

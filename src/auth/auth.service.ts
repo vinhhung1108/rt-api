@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import * as moment from 'moment-timezone';
 import { ChangePasswordDto } from 'src/user/dto/change-password.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/schemas/user.schema';
 import { UserService } from 'src/user/user.service';
-import * as bcrypt from 'bcrypt';
-import * as moment from 'moment-timezone';
 
 moment.tz.setDefault('Asia/Bangkok');
 
@@ -29,8 +29,8 @@ export class AuthService {
   async login(user: any) {
     const payload = {
       username: user.username,
-      sub: user.email,
-      _id: user._id,
+      sub: user._id,
+      email: user.email,
       roles: user.roles,
       isCreatable: user.isCreatable,
     }; //Declare fields return from User class then return to validate method in jwt strategy

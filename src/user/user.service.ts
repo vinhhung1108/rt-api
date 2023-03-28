@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 import * as bcrypt from 'bcrypt';
+import { from, Observable } from 'rxjs';
 
 export type Users = any;
 
@@ -19,8 +20,9 @@ export class UserService {
     return user.toObject(); /** mongoose to object normal */
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+  findAll(page = 1, limit = 10): Observable<User[]> {
+    const skip = limit * (page - 1);
+    return from(this.userModel.find({}).skip(skip).limit(limit).exec());
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
