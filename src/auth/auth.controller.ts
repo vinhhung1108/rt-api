@@ -8,8 +8,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Public } from 'src/decorator/public.decorator';
+import { SignUpUserDto } from 'src/user/dto';
 import { ChangePasswordDto } from 'src/user/dto/change-password.dto';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 
@@ -26,8 +26,8 @@ export class AuthController {
 
   @Public()
   @Post('signup')
-  async signup(@Body() createUserDto: CreateUserDto) {
-    return this.authService.signup(createUserDto);
+  async signup(@Body() signUpUserDto: SignUpUserDto) {
+    return this.authService.signup(signUpUserDto);
   }
 
   // @UseGuards(JwtAuthGuard) //using Jwt global

@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import * as moment from 'moment-timezone';
+import { SignUpUserDto } from 'src/user/dto';
 import { ChangePasswordDto } from 'src/user/dto/change-password.dto';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/schemas/user.schema';
 import { UserService } from 'src/user/user.service';
 
@@ -32,7 +32,7 @@ export class AuthService {
       sub: user._id,
       email: user.email,
       roles: user.roles,
-      isCreatable: user.isCreatable,
+      isCreateAble: user.isCreateAble,
     }; //Declare fields return from User class then return to validate method in jwt strategy
     const accessToken = this.jwtService.sign(payload, { expiresIn: '1d' });
     const decode = this.jwtService.verify(accessToken, {
@@ -45,7 +45,8 @@ export class AuthService {
     };
   }
 
-  async signup(user: CreateUserDto) {
+  async signup(userSignUp: SignUpUserDto) {
+    const user = { ...userSignUp, roles: ['author'], isCreateAble: false };
     return this.userService.createUser(user);
   }
 

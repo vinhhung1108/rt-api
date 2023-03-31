@@ -10,6 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { Roles } from 'src/decorator/roles.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './schemas/user.schema';
 import { UserService } from './user.service';
@@ -33,6 +34,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @Roles('admin')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }

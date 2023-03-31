@@ -14,4 +14,7 @@ export class CreateUserDto {
 
   @IsOptional()
   readonly roles: string[];
+
+  @IsOptional()
+  readonly isCreateAble: boolean;
 }

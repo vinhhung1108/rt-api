@@ -20,7 +20,7 @@ export class CaslAbilityFactory {
       can(Action.Manage, 'all');
     }
 
-    if (user.isCreatable) {
+    if (user.isCreateAble) {
       can(Action.Create, BlogPost);
     }
 
