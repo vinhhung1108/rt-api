@@ -28,6 +28,8 @@ export class CaslAbilityFactory {
 
     cannot(Action.Delete, BlogPost, { isPublished: true });
 
+    can(Action.Update, User, { _id: user._id });
+
     return build({
       detectSubjectType: (item) =>
         item.constructor as ExtractSubjectType<Subjects>,
