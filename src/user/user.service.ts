@@ -7,12 +7,17 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 import * as bcrypt from 'bcrypt';
 import { from, Observable } from 'rxjs';
+import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
+import { Action } from 'src/enum/action.enum';
 
 export type Users = any;
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private caslAbilityFactory: CaslAbilityFactory,
+  ) {}
 
   async findOne(username: string): Promise<Users | undefined> {
     const user = await this.userModel.findOne({ username: username });
@@ -34,8 +39,16 @@ export class UserService {
     return await this.userModel.create(user);
   }
 
-  async update(id: string, user: UpdateUserDto): Promise<User> {
-    return await this.userModel.findOneAndUpdate({ _id: id }, user, {
+  async update(
+    id: string,
+    userInfo: UpdateUserDto,
+    currentUser: User,
+  ): Promise<User | { message: string }> {
+    const ability = this.caslAbilityFactory.createForUser(currentUser);
+    if (!ability.can(Action.Update, User)) {
+      return { message: "You don't have permission to do that!" };
+    }
+    return await this.userModel.findOneAndUpdate({ _id: id }, userInfo, {
       returnOriginal: false,
     });
   }

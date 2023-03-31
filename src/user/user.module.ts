@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
+import { CaslModule } from 'src/casl/casl.module';
 import { User, UserSchema } from './schemas/user.schema';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
@@ -15,8 +17,9 @@ import { UserService } from './user.service';
         },
       },
     ]),
+    CaslModule,
   ],
-  providers: [UserService],
+  providers: [UserService, CaslAbilityFactory],
   exports: [UserService],
   controllers: [UserController],
 })

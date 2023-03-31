@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Patch,
   Query,
+  Request,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Roles } from 'src/decorator/roles.decorator';
@@ -35,8 +36,12 @@ export class UserController {
 
   @Patch(':id')
   @Roles('admin')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Request() req: any,
+  ) {
+    return this.userService.update(id, updateUserDto, req.user);
   }
 
   @Delete(':id')
