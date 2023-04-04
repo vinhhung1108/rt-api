@@ -47,7 +47,12 @@ export class AuthService {
   }
 
   async signup(userSignUp: SignUpUserDto) {
-    const user = { ...userSignUp, roles: [Role.Author], isCreateAble: false };
+    const user = {
+      ...userSignUp,
+      roles: [Role.Author],
+      isCreateAble: true,
+      isActive: true,
+    };
     return this.userService.createUser(user);
   }
 

@@ -27,8 +27,11 @@ export class User {
   @Prop({ default: ['user'] })
   readonly roles: Role[];
 
-  @Prop({ default: false })
+  @Prop({ default: true })
   readonly isCreateAble: boolean;
+
+  @Prop({ default: true })
+  readonly isActive: boolean;
 
   @Prop()
   readonly listingPost: string[];

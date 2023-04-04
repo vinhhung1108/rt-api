@@ -24,6 +24,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
+  @Roles(Role.Admin, Role.Mod)
   findAll(
     // @Query('q') keyword?: string,
     @Query('_limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
@@ -33,12 +34,13 @@ export class UserController {
   }
 
   @Get(':username')
+  @Roles(Role.Admin, Role.Mod)
   findByUsername(@Param('username') username: string) {
     return this.userService.findOne(username);
   }
 
   @Patch(':id')
-  @Roles(Role.Admin)
+  @Roles(Role.Admin, Role.Mod)
   update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -48,12 +50,13 @@ export class UserController {
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   deleteOne(@Param('id') id: string) {
     return this.userService.deleteOne(id);
   }
 
-  @Roles(Role.Admin)
   @Post('create')
+  @Roles(Role.Admin, Role.Mod)
   createUser(@Body() user: CreateUserDto) {
     return this.userService.createUser(user);
   }

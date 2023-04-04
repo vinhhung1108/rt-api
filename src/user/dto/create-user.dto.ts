@@ -18,4 +18,7 @@ export class CreateUserDto {
 
   @IsOptional()
   readonly isCreateAble: boolean;
+
+  @IsOptional()
+  readonly isActive: boolean;
 }
