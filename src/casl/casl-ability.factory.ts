@@ -6,6 +6,7 @@ import {
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { Action } from 'src/enum/action.enum';
+import { Role } from 'src/enum/roles.enum';
 import { Post as BlogPost } from 'src/post/schemas/post.schema';
 import { User } from 'src/user/schemas/user.schema';
 
@@ -16,7 +17,7 @@ export class CaslAbilityFactory {
   createForUser(user: User) {
     const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
 
-    if (user.roles?.includes('admin')) {
+    if (user.roles?.includes(Role.Admin)) {
       can(Action.Manage, 'all');
     }
 

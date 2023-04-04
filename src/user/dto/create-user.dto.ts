@@ -1,4 +1,5 @@
 import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { Role } from 'src/enum/roles.enum';
 
 export class CreateUserDto {
   // userId: string;
@@ -13,7 +14,7 @@ export class CreateUserDto {
   readonly email: string;
 
   @IsOptional()
-  readonly roles: string[];
+  readonly roles: Role[];
 
   @IsOptional()
   readonly isCreateAble: boolean;

@@ -7,11 +7,14 @@ import {
   Param,
   ParseIntPipe,
   Patch,
+  Post,
   Query,
   Request,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Roles } from 'src/decorator/roles.decorator';
+import { Role } from 'src/enum/roles.enum';
+import { CreateUserDto } from './dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './schemas/user.schema';
 import { UserService } from './user.service';
@@ -35,7 +38,7 @@ export class UserController {
   }
 
   @Patch(':id')
-  @Roles('admin')
+  @Roles(Role.Admin)
   update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -47,5 +50,11 @@ export class UserController {
   @Delete(':id')
   deleteOne(@Param('id') id: string) {
     return this.userService.deleteOne(id);
+  }
+
+  @Roles(Role.Admin)
+  @Post('create')
+  createUser(@Body() user: CreateUserDto) {
+    return this.userService.createUser(user);
   }
 }

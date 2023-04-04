@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import * as moment from 'moment-timezone';
+import { Role } from 'src/enum/roles.enum';
 import { SignUpUserDto } from 'src/user/dto';
 import { ChangePasswordDto } from 'src/user/dto/change-password.dto';
 import { User } from 'src/user/schemas/user.schema';
@@ -46,7 +47,7 @@ export class AuthService {
   }
 
   async signup(userSignUp: SignUpUserDto) {
-    const user = { ...userSignUp, roles: ['author'], isCreateAble: false };
+    const user = { ...userSignUp, roles: [Role.Author], isCreateAble: false };
     return this.userService.createUser(user);
   }
 
