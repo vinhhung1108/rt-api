@@ -28,9 +28,9 @@ import { UserModule } from './user/user.module';
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('database.uri'),
-      }),
+      useFactory: async (configService: ConfigService) => {
+        return { uri: configService.get<string>('database.uri') };
+      },
       inject: [ConfigService],
     }),
     ThrottlerModule.forRootAsync({

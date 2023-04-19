@@ -11,7 +11,15 @@ import { Post, PostSchema } from './schemas/post.schema';
 @Module({
   imports: [
     AuthModule,
-    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
+    MongooseModule.forFeatureAsync([
+      {
+        name: Post.name,
+        useFactory: () => {
+          const schema = PostSchema;
+          return schema;
+        },
+      },
+    ]),
     ProvinceModule,
     CaslModule,
   ],

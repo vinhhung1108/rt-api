@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
-import { Model } from 'mongoose';
+import { Error, Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { Action } from 'src/enum/action.enum';
@@ -30,27 +30,61 @@ export class UserService {
     return from(this.userModel.find({}).skip(skip).limit(limit).exec());
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const lastUser = await this.lastUser();
-    const userId = lastUser ? ++lastUser.userId : 1;
-    const salt = await bcrypt.genSalt();
-    const password = await bcrypt.hash(createUserDto.password, salt);
-    const user = { ...createUserDto, userId: userId, password: password };
-    return await this.userModel.create(user);
+  async createUser(
+    createUserDto: CreateUserDto,
+  ): Promise<User | Error | { message: string }> {
+    try {
+      const lastUser = await this.lastUser();
+      const userId = lastUser ? ++lastUser.userId : 1;
+      const salt = await bcrypt.genSalt();
+      const password = await bcrypt.hash(createUserDto.password, salt);
+      const user = { ...createUserDto, userId: userId, password: password };
+      return await this.userModel.create(user);
+    } catch (error) {
+      if (error.code === 11000) {
+        const keys = Object.keys(error.keyValue).join();
+        throw new HttpException(
+          `The "${keys}" already exists!`,
+          HttpStatus.CONFLICT,
+        );
+      } else {
+        throw error;
+      }
+    }
   }
 
   async update(
     id: string,
     userInfo: UpdateUserDto,
     currentUser: User,
-  ): Promise<User | { message: string }> {
+  ): Promise<User | Error | { message: string }> {
     const ability = this.caslAbilityFactory.createForUser(currentUser);
     if (!ability.can(Action.Update, User)) {
       return { message: "You don't have permission to do that!" };
     }
-    return await this.userModel.findOneAndUpdate({ _id: id }, userInfo, {
-      returnOriginal: false,
-    });
+    try {
+      const { password: reqPassword, ...userUpdate } = userInfo;
+      const salt = await bcrypt.genSalt();
+      const passwordHash = reqPassword
+        ? await bcrypt.hash(reqPassword, salt)
+        : null;
+      const userUpdateDto = passwordHash
+        ? { ...userUpdate, password: passwordHash }
+        : { ...userUpdate };
+      return await this.userModel.findOneAndUpdate({ _id: id }, userUpdateDto, {
+        returnOriginal: false,
+      });
+    } catch (error) {
+      if (error.code === 11000) {
+        const keys = Object.keys(error.keyValue).join();
+        throw new HttpException(
+          `The "${keys}" already exists!`,
+          HttpStatus.CONFLICT,
+        );
+      } else {
+        throw error;
+      }
+    }
   }
 
   async deleteOne(id: string): Promise<User> {
