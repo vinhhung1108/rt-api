@@ -33,10 +33,10 @@ export class UserController {
     return this.userService.findAll(page, limit);
   }
 
-  @Get(':username')
+  @Get(':id')
   @Roles(Role.Admin, Role.Mod)
-  findByUsername(@Param('username') username: string) {
-    return this.userService.findOne(username);
+  findByUsername(@Param('id') id: string) {
+    return this.userService.findOne(id);
   }
 
   @Patch(':id')

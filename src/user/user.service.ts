@@ -19,8 +19,8 @@ export class UserService {
     private caslAbilityFactory: CaslAbilityFactory,
   ) {}
 
-  async findOne(username: string): Promise<Users | undefined> {
-    const user = await this.userModel.findOne({ username: username });
+  async findOne(id: string): Promise<Users | undefined> {
+    const user = await this.userModel.findOne({ _id: id });
 
     return user.toObject(); /** mongoose to object normal */
   }
