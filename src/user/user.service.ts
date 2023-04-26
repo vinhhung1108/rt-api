@@ -21,7 +21,11 @@ export class UserService {
 
   async findOne(id: string): Promise<Users | undefined> {
     const user = await this.userModel.findOne({ _id: id });
+    return user.toObject(); /** mongoose to object normal */
+  }
 
+  async findByUsername(username: string): Promise<Users | undefined> {
+    const user = await this.userModel.findOne({ username: username });
     return user.toObject(); /** mongoose to object normal */
   }
 
