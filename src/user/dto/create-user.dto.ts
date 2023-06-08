@@ -21,4 +21,7 @@ export class CreateUserDto {
 
   @IsOptional()
   readonly isActive: boolean;
+
+  @IsOptional()
+  readonly isLoggedIn: boolean;
 }

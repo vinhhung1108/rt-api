@@ -53,6 +53,7 @@ export class AuthService {
       roles: [Role.Author],
       isCreateAble: true,
       isActive: true,
+      isLoggedIn: true,
     };
     return this.userService.createUser(user);
   }

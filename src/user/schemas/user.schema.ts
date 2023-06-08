@@ -34,6 +34,9 @@ export class User {
   readonly isActive: boolean;
 
   @Prop()
+  readonly isLoggedIn: boolean;
+
+  @Prop()
   readonly listingPost: string[];
 
   @Prop()
