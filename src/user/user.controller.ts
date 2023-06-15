@@ -24,7 +24,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  @Roles(Role.Admin, Role.Mod)
+  @Roles(Role.Admin, Role.Mod, Role.Author)
   findAll(
     // @Query('q') keyword?: string,
     @Query('_limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
@@ -40,7 +40,7 @@ export class UserController {
   }
 
   @Patch(':id')
-  @Roles(Role.Admin, Role.Mod)
+  @Roles(Role.Admin, Role.Mod, Role.Author)
   update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,

@@ -7,6 +7,7 @@ import { SignUpUserDto } from 'src/user/dto';
 import { ChangePasswordDto } from 'src/user/dto/change-password.dto';
 import { User } from 'src/user/schemas/user.schema';
 import { UserService } from 'src/user/user.service';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 moment.tz.setDefault('Asia/Bangkok');
 
@@ -24,6 +25,11 @@ export class AuthService {
     if (user && isMatch) {
       const { password, ...result } = user;
       return result;
+    } else {
+      throw new HttpException(
+        `Loi xac thuc ${user.password}`,
+        HttpStatus.CONFLICT,
+      );
     }
     return null;
   }
