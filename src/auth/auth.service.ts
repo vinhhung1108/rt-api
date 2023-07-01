@@ -46,6 +46,7 @@ export class AuthService {
     const decode = this.jwtService.verify(accessToken, {
       secret: process.env.SECRET_KEY,
     });
+    this.userService.update(user._id, { isLoggedIn: true }, user);
     return {
       accessToken: accessToken,
       // expiredAt: moment.unix(decode.exp).format('YYYY-MM-DD HH:mm:ss'),
